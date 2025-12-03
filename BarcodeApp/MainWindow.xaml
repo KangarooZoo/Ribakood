@@ -23,13 +23,6 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Top bar with theme toggle -->
-        <DockPanel Grid.Row="0" Margin="0,0,0,8">
-            <CheckBox Content="Tume teema"
-                      IsChecked="{Binding IsDarkTheme}"
-                      HorizontalAlignment="Right"/>
-        </DockPanel>
-
         <!-- Main content area -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>

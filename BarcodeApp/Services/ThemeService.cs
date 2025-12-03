@@ -5,93 +5,76 @@ namespace BarcodeApp.Services;
 
 public interface IThemeService
 {
-    bool IsDarkTheme { get; }
     void ApplySavedTheme();
-    void ToggleTheme();
 }
 
 public class ThemeService : IThemeService
 {
-    public bool IsDarkTheme { get; private set; } = true;
-
     public void ApplySavedTheme()
     {
-        var saved = Properties.Settings.Default.Theme;
-        if (string.Equals(saved, "Light", StringComparison.OrdinalIgnoreCase))
-        {
-            SetBaseTheme(false);
-        }
-        else
-        {
-            SetBaseTheme(true);
-        }
+        // Always apply dark theme
+        SetDarkTheme();
     }
 
-    public void ToggleTheme()
+    private void SetDarkTheme()
     {
-        SetBaseTheme(!IsDarkTheme);
-        Properties.Settings.Default.Theme = IsDarkTheme ? "Dark" : "Light";
-        Properties.Settings.Default.Save();
-    }
-
-    private void SetBaseTheme(bool dark)
-    {
-        IsDarkTheme = dark;
         try
         {
             var app = Application.Current;
             if (app?.Resources != null)
             {
-                if (dark)
-                {
-                    // Industry Standard Dark Mode Colors (VS Code, GitHub, Discord style)
-                    // Background/Surface - Deep dark for reduced eye strain
-                    app.Resources["MaterialDesignBackground"] = new SolidColorBrush(Color.FromRgb(0x12, 0x12, 0x12)); // #121212 - Pure dark background
-                    app.Resources["MaterialDesignPaper"] = new SolidColorBrush(Color.FromRgb(0x1E, 0x1E, 0x1E)); // #1E1E1E - Card/surface (VS Code style)
+                    // Custom Dark Theme Colors (from CSS variables)
+                    // Base
+                    app.Resources["MaterialDesignBackground"] = new SolidColorBrush(Color.FromRgb(0x0F, 0x17, 0x2A)); // #0F172A - window background
+                    app.Resources["MaterialDesignPaper"] = new SolidColorBrush(Color.FromRgb(0x11, 0x18, 0x27)); // #111827 - cards, panels
+                    app.Resources["BgHoverBrush"] = new SolidColorBrush(Color.FromRgb(0x1E, 0x29, 0x3B)); // #1E293B - hover background
+                    app.Resources["MaterialDesignDivider"] = new SolidColorBrush(Color.FromRgb(0x1F, 0x29, 0x37)); // #1F2937 - borders
                     
-                    // Text - High contrast for readability
-                    app.Resources["MaterialDesignBody"] = new SolidColorBrush(Color.FromRgb(0xE4, 0xE4, 0xE7)); // #E4E4E7 - Primary text (high contrast white)
-                    app.Resources["MaterialDesignSecondaryTextBrush"] = new SolidColorBrush(Color.FromRgb(0xA1, 0xA1, 0xAA)); // #A1A1AA - Secondary text (visible gray)
+                    // Text - All white/very light for visibility
+                    app.Resources["MaterialDesignBody"] = new SolidColorBrush(Color.FromRgb(0xFF, 0xFF, 0xFF)); // #FFFFFF - main text (white)
+                    app.Resources["MaterialDesignSecondaryTextBrush"] = new SolidColorBrush(Color.FromRgb(0xF3, 0xF4, 0xF6)); // #F3F4F6 - secondary text (very light gray, almost white)
+                    app.Resources["TextSubtleBrush"] = new SolidColorBrush(Color.FromRgb(0xD1, 0xD5, 0xDB)); // #D1D5DB - hints, help text (light gray, visible)
+                    app.Resources["TextInvertedBrush"] = new SolidColorBrush(Color.FromRgb(0x02, 0x06, 0x17)); // #020617 - text on bright buttons
                     
-                    // Dividers/Outlines - Visible but subtle
-                    app.Resources["MaterialDesignDivider"] = new SolidColorBrush(Color.FromRgb(0x3F, 0x3F, 0x46)); // #3F3F46 - Dividers/borders (visible on dark)
+                    // Primary brand / actions (blue)
+                    app.Resources["PrimaryBrush"] = new SolidColorBrush(Color.FromRgb(0x3B, 0x82, 0xF6)); // #3B82F6 - primary
+                    app.Resources["PrimaryHoverBrush"] = new SolidColorBrush(Color.FromRgb(0x25, 0x63, 0xEB)); // #2563EB - primary hover
+                    app.Resources["PrimaryActiveBrush"] = new SolidColorBrush(Color.FromRgb(0x1D, 0x4E, 0xD8)); // #1D4ED8 - primary active
+                    app.Resources["OnPrimaryBrush"] = new SolidColorBrush(Color.FromRgb(0xFF, 0xFF, 0xFF)); // White text on primary
+                    app.Resources["PrimaryContainerBrush"] = new SolidColorBrush(Color.FromRgb(0x25, 0x63, 0xEB)); // Use hover for container
+                    app.Resources["OnPrimaryContainerBrush"] = new SolidColorBrush(Color.FromRgb(0xFF, 0xFF, 0xFF)); // White text
                     
-                    // Primary colors - Bright and visible
-                    app.Resources["PrimaryBrush"] = new SolidColorBrush(Color.FromRgb(0x63, 0x66, 0xF1)); // #6366F1 - Indigo primary (bright, visible)
-                    app.Resources["OnPrimaryBrush"] = new SolidColorBrush(Color.FromRgb(0xFF, 0xFF, 0xFF)); // #FFFFFF - White text on primary
-                    app.Resources["PrimaryContainerBrush"] = new SolidColorBrush(Color.FromRgb(0x4F, 0x46, 0xE5)); // #4F46E5 - Darker indigo for containers
-                    app.Resources["OnPrimaryContainerBrush"] = new SolidColorBrush(Color.FromRgb(0xE0, 0xE7, 0xFF)); // #E0E7FF - Light indigo text
+                    // Secondary accent (teal) - Brighter for visibility
+                    app.Resources["SecondaryBrush"] = new SolidColorBrush(Color.FromRgb(0x2D, 0xDD, 0xD4)); // #2DDDD4 - brighter teal
+                    app.Resources["SecondaryHoverBrush"] = new SolidColorBrush(Color.FromRgb(0x14, 0xB8, 0xA6)); // #14B8A6 - secondary hover
+                    app.Resources["AccentBrush"] = new SolidColorBrush(Color.FromRgb(0x2D, 0xDD, 0xD4)); // Brighter accent
                     
-                    // Error colors - Bright and attention-grabbing
-                    app.Resources["ErrorBrush"] = new SolidColorBrush(Color.FromRgb(0xEF, 0x44, 0x44)); // #EF4444 - Bright red (highly visible)
-                    app.Resources["OnErrorBrush"] = new SolidColorBrush(Color.FromRgb(0xFF, 0xFF, 0xFF)); // #FFFFFF - White text on error
+                    // Inputs / fields - Lighter than background to show it's inputable
+                    app.Resources["InputBackgroundBrush"] = new SolidColorBrush(Color.FromRgb(0x1E, 0x29, 0x3B)); // #1E293B - lighter than background (#0F172A)
+                    app.Resources["InputBorderBrush"] = new SolidColorBrush(Color.FromRgb(0x1E, 0x29, 0x3B)); // #1E293B - input border
+                    app.Resources["InputFocusBrush"] = new SolidColorBrush(Color.FromRgb(0x3B, 0x82, 0xF6)); // #3B82F6 - input focus
+                    app.Resources["PlaceholderBrush"] = new SolidColorBrush(Color.FromRgb(0x9C, 0xA3, 0xAF)); // #9CA3AF - placeholder (visible gray)
                     
-                    // Success colors - Bright green
-                    app.Resources["SuccessBrush"] = new SolidColorBrush(Color.FromRgb(0x22, 0xC5, 0x5E)); // #22C55E - Bright green
+                    // States
+                    app.Resources["SuccessBrush"] = new SolidColorBrush(Color.FromRgb(0x22, 0xC5, 0x5E)); // #22C55E - success
+                    app.Resources["WarningBrush"] = new SolidColorBrush(Color.FromRgb(0xFA, 0xCC, 0x15)); // #FACC15 - warning
+                    app.Resources["ErrorBrush"] = new SolidColorBrush(Color.FromRgb(0xEF, 0x44, 0x44)); // #EF4444 - error
+                    app.Resources["InfoBrush"] = new SolidColorBrush(Color.FromRgb(0x38, 0xBD, 0xF8)); // #38BDF8 - info
+                    app.Resources["OnErrorBrush"] = new SolidColorBrush(Color.FromRgb(0xFF, 0xFF, 0xFF)); // White text on error
                     
-                    // Warning colors - Bright amber
-                    app.Resources["WarningBrush"] = new SolidColorBrush(Color.FromRgb(0xF5, 0x9E, 0x0B)); // #F59E0B - Bright amber
+                    // Links
+                    app.Resources["LinkBrush"] = new SolidColorBrush(Color.FromRgb(0x60, 0xA5, 0xFA)); // #60A5FA - link
+                    app.Resources["LinkHoverBrush"] = new SolidColorBrush(Color.FromRgb(0x93, 0xC5, 0xFD)); // #93C5FD - link hover
                     
-                    // Surface variants for containers - Subtle elevation
-                    app.Resources["SurfaceContainerHighBrush"] = new SolidColorBrush(Color.FromRgb(0x25, 0x25, 0x25)); // #252525 - Elevated surfaces (dialogs)
-                    app.Resources["SurfaceContainerLowBrush"] = new SolidColorBrush(Color.FromRgb(0x18, 0x18, 0x18)); // #181818 - Slightly elevated
-                    app.Resources["SurfaceVariantBrush"] = new SolidColorBrush(Color.FromRgb(0x2A, 0x2A, 0x2A)); // #2A2A2A - Variant surfaces
-                }
-                else
-                {
-                    // Light theme (keeping existing values)
-                    app.Resources["MaterialDesignPaper"] = new SolidColorBrush(Colors.White);
-                    app.Resources["MaterialDesignBody"] = new SolidColorBrush(Color.FromRgb(0x21, 0x21, 0x21));
-                    app.Resources["MaterialDesignDivider"] = new SolidColorBrush(Color.FromRgb(0x9E, 0x9E, 0x9E));
-                    app.Resources["MaterialDesignBackground"] = new SolidColorBrush(Color.FromRgb(0xF5, 0xF5, 0xF5));
-                    app.Resources["MaterialDesignSecondaryTextBrush"] = new SolidColorBrush(Color.FromRgb(0x42, 0x42, 0x42));
-                }
+                    // Surface variants for containers
+                app.Resources["SurfaceContainerHighBrush"] = new SolidColorBrush(Color.FromRgb(0x11, 0x18, 0x27)); // #111827 - elevated surfaces
+                app.Resources["SurfaceContainerLowBrush"] = new SolidColorBrush(Color.FromRgb(0x0F, 0x17, 0x2A)); // #0F172A - slightly elevated
+                app.Resources["SurfaceVariantBrush"] = new SolidColorBrush(Color.FromRgb(0x1E, 0x29, 0x3B)); // #1E293B - variant surfaces
             }
         }
         catch
         {
-            // If theme switching fails, just update the flag
-            // The app will still work with the default dark theme
+            // If theme application fails, the app will still work with default dark theme
         }
     }
 }

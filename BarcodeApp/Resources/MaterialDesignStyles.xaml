@@ -2,13 +2,14 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converters="clr-namespace:BarcodeApp.Converters">
     
-    <!-- Industry Standard Dark Mode Primary Colors -->
-    <Color x:Key="PrimaryColor">#6366F1</Color> <!-- Indigo primary (bright, visible) -->
-    <Color x:Key="PrimaryDarkColor">#4F46E5</Color> <!-- Darker indigo for containers -->
-    <Color x:Key="PrimaryLightColor">#E0E7FF</Color> <!-- Light indigo text -->
+    <!-- Custom Dark Mode Primary Colors -->
+    <Color x:Key="PrimaryColor">#3B82F6</Color> <!-- Primary blue -->
+    <Color x:Key="PrimaryDarkColor">#2563EB</Color> <!-- Primary hover -->
+    <Color x:Key="PrimaryActiveColor">#1D4ED8</Color> <!-- Primary active -->
+    <Color x:Key="PrimaryLightColor">#FFFFFF</Color> <!-- White text -->
     <Color x:Key="OnPrimaryColor">#FFFFFF</Color> <!-- White text on primary -->
-    <Color x:Key="AccentColor">#8B5CF6</Color> <!-- Purple accent -->
-    <Color x:Key="AccentDarkColor">#7C3AED</Color> <!-- Darker purple -->
+    <Color x:Key="AccentColor">#2DDDD4</Color> <!-- Teal accent/secondary (brighter) -->
+    <Color x:Key="AccentDarkColor">#14B8A6</Color> <!-- Teal hover -->
     
     <!-- Light Theme Colors - Improved contrast -->
     <SolidColorBrush x:Key="LightBackgroundBrush" Color="#F5F5F5"/>
@@ -17,18 +18,18 @@
     <SolidColorBrush x:Key="LightSecondaryTextBrush" Color="#424242"/> <!-- Darker for better contrast -->
     <SolidColorBrush x:Key="LightDividerBrush" Color="#9E9E9E"/> <!-- Darker for visibility -->
     
-    <!-- Dark Theme Colors - Industry Standard -->
-    <SolidColorBrush x:Key="DarkBackgroundBrush" Color="#121212"/> <!-- Pure dark background -->
-    <SolidColorBrush x:Key="DarkSurfaceBrush" Color="#1E1E1E"/> <!-- Card/surface (VS Code style) -->
-    <SolidColorBrush x:Key="DarkTextBrush" Color="#E4E4E7"/> <!-- High contrast white -->
-    <SolidColorBrush x:Key="DarkSecondaryTextBrush" Color="#A1A1AA"/> <!-- Visible gray -->
-    <SolidColorBrush x:Key="DarkDividerBrush" Color="#3F3F46"/> <!-- Visible dividers -->
+    <!-- Dark Theme Colors - Custom -->
+    <SolidColorBrush x:Key="DarkBackgroundBrush" Color="#0F172A"/> <!-- window background -->
+    <SolidColorBrush x:Key="DarkSurfaceBrush" Color="#111827"/> <!-- cards, panels -->
+    <SolidColorBrush x:Key="DarkTextBrush" Color="#E5E7EB"/> <!-- main text -->
+    <SolidColorBrush x:Key="DarkSecondaryTextBrush" Color="#9CA3AF"/> <!-- secondary text -->
+    <SolidColorBrush x:Key="DarkDividerBrush" Color="#1F2937"/> <!-- borders -->
     
-    <!-- Dynamic Theme Resources (default to industry standard dark theme) -->
-    <SolidColorBrush x:Key="MaterialDesignPaper" Color="#1E1E1E"/> <!-- Card/surface -->
-    <SolidColorBrush x:Key="MaterialDesignBody" Color="#E4E4E7"/> <!-- Primary text -->
-    <SolidColorBrush x:Key="MaterialDesignDivider" Color="#3F3F46"/> <!-- Dividers/borders -->
-    <SolidColorBrush x:Key="MaterialDesignBackground" Color="#121212"/> <!-- Background -->
+    <!-- Dynamic Theme Resources (default to custom dark theme) -->
+    <SolidColorBrush x:Key="MaterialDesignPaper" Color="#111827"/> <!-- cards, panels -->
+    <SolidColorBrush x:Key="MaterialDesignBody" Color="#FFFFFF"/> <!-- main text (white) -->
+    <SolidColorBrush x:Key="MaterialDesignDivider" Color="#1F2937"/> <!-- borders -->
+    <SolidColorBrush x:Key="MaterialDesignBackground" Color="#0F172A"/> <!-- window background -->
     
     <!-- Primary Color Brushes -->
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/> <!-- primary -->
@@ -52,11 +53,11 @@
         </Setter>
     </Style>
     
-    <!-- Outlined TextBox Style with better visibility -->
+    <!-- Outlined TextBox Style with custom colors -->
     <Style x:Key="MaterialDesignOutlinedTextBox" TargetType="TextBox">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}"/>
-        <Setter Property="BorderThickness" Value="0,0,0,2.5"/> <!-- Thicker, more visible border -->
+        <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="0,0,0,2.5"/>
         <Setter Property="Padding" Value="0,8"/>
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/>
@@ -73,7 +74,7 @@
                                         Focusable="False"/>
                             <TextBlock x:Name="HintText"
                                      Text="{TemplateBinding Tag}"
-                                     Foreground="{DynamicResource MaterialDesignSecondaryTextBrush}"
+                                     Foreground="{DynamicResource PlaceholderBrush}"
                                      VerticalAlignment="Center"
                                      Margin="0,0,0,8"
                                      IsHitTestVisible="False"
@@ -96,62 +97,173 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush">
-                    <Setter.Value>
-                        <SolidColorBrush Color="{StaticResource PrimaryColor}" Opacity="0.8"/>
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHoverBrush}"/>
             </Trigger>
             <Trigger Property="IsFocused" Value="True">
-                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/> <!-- primary for focused state -->
+                <Setter Property="BorderBrush" Value="{DynamicResource InputFocusBrush}"/>
                 <Setter Property="BorderThickness" Value="0,0,0,3"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="BorderBrush">
-                    <Setter.Value>
-                        <SolidColorBrush Color="#3F3F46" Opacity="0.4"/> <!-- Visible disabled border -->
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="Foreground">
-                    <Setter.Value>
-                        <SolidColorBrush Color="#71717A" Opacity="0.6"/> <!-- Visible disabled text -->
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}" Opacity="0.4"/>
+                <Setter Property="Foreground" Value="{DynamicResource TextSubtleBrush}" Opacity="0.6"/>
             </Trigger>
         </Style.Triggers>
     </Style>
     
-    <!-- Outlined ComboBox Style with better visibility -->
+    <!-- Outlined ComboBox Style with custom colors and dropdown styling -->
     <Style x:Key="MaterialDesignOutlinedComboBox" TargetType="ComboBox">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}"/>
-        <Setter Property="BorderThickness" Value="0,0,0,2.5"/> <!-- Thicker, more visible border -->
+        <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="0,0,0,2.5"/>
         <Setter Property="Padding" Value="0,8"/>
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="0" x:Name="ColumnDefinition1"/>
+                            <ColumnDefinition Width="Auto" x:Name="ColumnDefinition2"/>
+                        </Grid.ColumnDefinitions>
+                        <Border x:Name="Border"
+                            Grid.ColumnSpan="3"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4,4,0,0"/>
+                        <ContentPresenter Name="ContentSite"
+                                        IsHitTestVisible="False"
+                                        Content="{TemplateBinding SelectionBoxItem}"
+                                        ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                        ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                        Margin="0,0,24,0"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Left"/>
+                        <TextBox x:Name="PART_EditableTextBox"
+                               Style="{x:Null}"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Margin="0,0,24,0"
+                               Focusable="True"
+                               Background="Transparent"
+                               BorderThickness="0"
+                               Foreground="{TemplateBinding Foreground}"
+                               Visibility="Hidden"
+                               IsReadOnly="{TemplateBinding IsReadOnly}"/>
+                        <ToggleButton Name="ToggleButton"
+                                    Grid.Column="2"
+                                    Focusable="False"
+                                    ClickMode="Press"
+                                    IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}">
+                            <ToggleButton.Template>
+                                <ControlTemplate TargetType="ToggleButton">
+                                    <Border Background="Transparent" BorderThickness="0" Padding="4,0">
+                                        <Path x:Name="Arrow"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,4,0"
+                                            Fill="{DynamicResource MaterialDesignBody}"
+                                            Data="M 0 0 L 4 4 L 8 0 Z"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </ToggleButton.Template>
+                        </ToggleButton>
+                        <Popup Name="Popup"
+                             Placement="Bottom"
+                             IsOpen="{TemplateBinding IsDropDownOpen}"
+                             AllowsTransparency="True"
+                             Focusable="False"
+                             PopupAnimation="Slide">
+                            <Grid Name="DropDown"
+                                SnapsToDevicePixels="True"
+                                MinWidth="{TemplateBinding ActualWidth}"
+                                MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                <Border x:Name="DropDownBorder"
+                                    Background="{DynamicResource MaterialDesignPaper}"
+                                    BorderThickness="1"
+                                    BorderBrush="{DynamicResource MaterialDesignDivider}"
+                                    CornerRadius="4"
+                                    Margin="0,4,0,0">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="8" ShadowDepth="4" Opacity="0.3" Color="Black"/>
+                                    </Border.Effect>
+                                    <ScrollViewer Margin="4,0,4,0" SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasItems" Value="false">
+                            <Setter TargetName="DropDownBorder" Property="Height" Value="95"/>
+                        </Trigger>
+                        <Trigger Property="IsGrouping" Value="true">
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                        </Trigger>
+                        <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="true">
+                            <Setter TargetName="DropDownBorder" Property="CornerRadius" Value="4"/>
+                            <Setter TargetName="DropDownBorder" Property="Margin" Value="0,4,0,0"/>
+                        </Trigger>
+                        <Trigger Property="IsEditable" Value="true">
+                            <Setter Property="IsTabStop" Value="false"/>
+                            <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Resources>
+            <!-- ComboBoxItem Style for dropdown items - White text on dark background -->
+            <Style TargetType="ComboBoxItem">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/> <!-- White text -->
+                <Setter Property="Padding" Value="12,8"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ComboBoxItem">
+                            <Border Background="{TemplateBinding Background}"
+                                  BorderThickness="0"
+                                  Padding="{TemplateBinding Padding}">
+                                <ContentPresenter/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource BgHoverBrush}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/> <!-- Keep white on hover -->
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource PrimarySoftBrush}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/> <!-- White text when selected -->
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="True"/>
+                                        <Condition Property="IsMouseOver" Value="True"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" Value="{DynamicResource PrimaryHoverBrush}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource OnPrimaryBrush}"/> <!-- White text -->
+                                </MultiTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Style.Resources>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush">
-                    <Setter.Value>
-                        <SolidColorBrush Color="{StaticResource PrimaryColor}" Opacity="0.8"/>
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHoverBrush}"/>
             </Trigger>
             <Trigger Property="IsFocused" Value="True">
-                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
-                <Setter Property="BorderThickness" Value="0,0,0,3"/> <!-- Even thicker when focused -->
+                <Setter Property="BorderBrush" Value="{DynamicResource InputFocusBrush}"/>
+                <Setter Property="BorderThickness" Value="0,0,0,3"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="BorderBrush">
-                    <Setter.Value>
-                        <SolidColorBrush Color="#3F3F46" Opacity="0.4"/> <!-- Visible disabled border -->
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="Foreground">
-                    <Setter.Value>
-                        <SolidColorBrush Color="#71717A" Opacity="0.6"/> <!-- Visible disabled text -->
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}" Opacity="0.4"/>
+                <Setter Property="Foreground" Value="{DynamicResource TextSubtleBrush}" Opacity="0.6"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -270,18 +382,10 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <SolidColorBrush Color="#3F3F46" Opacity="0.6"/> <!-- Visible hover state -->
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="Background" Value="{DynamicResource BgHoverBrush}"/>
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <SolidColorBrush Color="#52525B" Opacity="0.8"/> <!-- Visible pressed state -->
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="Background" Value="{DynamicResource PrimaryActiveBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -412,19 +516,149 @@
         </Setter>
     </Style>
     
-    <!-- Secondary Text Brush - Industry Standard -->
-    <SolidColorBrush x:Key="MaterialDesignSecondaryTextBrush" Color="#A1A1AA"/> <!-- Visible gray for secondary text -->
+    <!-- Secondary Text Brush - Custom (all white/very light for visibility) -->
+    <SolidColorBrush x:Key="MaterialDesignSecondaryTextBrush" Color="#F3F4F6"/> <!-- secondary text (very light, almost white) -->
+    <SolidColorBrush x:Key="TextSubtleBrush" Color="#D1D5DB"/> <!-- hints, help text (light gray, visible) -->
+    <SolidColorBrush x:Key="TextInvertedBrush" Color="#020617"/> <!-- text on bright buttons -->
     
-    <!-- Warning/Error Colors - Industry Standard (Bright and Visible) -->
-    <SolidColorBrush x:Key="ErrorBrush" Color="#EF4444"/> <!-- Bright red (highly visible) -->
+    <!-- Primary Brushes - Custom -->
+    <SolidColorBrush x:Key="PrimaryHoverBrush" Color="#2563EB"/> <!-- primary hover -->
+    <SolidColorBrush x:Key="PrimaryActiveBrush" Color="#1D4ED8"/> <!-- primary active -->
+    <SolidColorBrush x:Key="PrimarySoftBrush" Color="#3B82F6" Opacity="0.15"/> <!-- subtle backgrounds -->
+    
+    <!-- Secondary/Accent Brushes - Custom (brighter for visibility) -->
+    <SolidColorBrush x:Key="SecondaryBrush" Color="#2DDDD4"/> <!-- secondary/teal (brighter) -->
+    <SolidColorBrush x:Key="SecondaryHoverBrush" Color="#14B8A6"/> <!-- secondary hover -->
+    <SolidColorBrush x:Key="SecondarySoftBrush" Color="#2DDDD4" Opacity="0.15"/> <!-- subtle backgrounds -->
+    
+    <!-- Input Brushes - Custom (lighter than background to show it's inputable) -->
+    <SolidColorBrush x:Key="InputBackgroundBrush" Color="#1E293B"/> <!-- input bg (lighter than #0F172A) -->
+    <SolidColorBrush x:Key="InputBorderBrush" Color="#1E293B"/> <!-- input border -->
+    <SolidColorBrush x:Key="InputFocusBrush" Color="#3B82F6"/> <!-- input focus -->
+    <SolidColorBrush x:Key="PlaceholderBrush" Color="#9CA3AF"/> <!-- placeholder (visible gray) -->
+    
+    <!-- Warning/Error Colors - Custom -->
+    <SolidColorBrush x:Key="ErrorBrush" Color="#EF4444"/> <!-- error -->
+    <SolidColorBrush x:Key="ErrorSoftBrush" Color="#EF4444" Opacity="0.18"/> <!-- error soft -->
     <SolidColorBrush x:Key="OnErrorBrush" Color="#FFFFFF"/> <!-- White text on error -->
-    <SolidColorBrush x:Key="SuccessBrush" Color="#22C55E"/> <!-- Bright green (visible) -->
-    <SolidColorBrush x:Key="WarningBrush" Color="#F59E0B"/> <!-- Bright amber (visible) -->
+    <SolidColorBrush x:Key="SuccessBrush" Color="#22C55E"/> <!-- success -->
+    <SolidColorBrush x:Key="SuccessSoftBrush" Color="#22C55E" Opacity="0.18"/> <!-- success soft -->
+    <SolidColorBrush x:Key="WarningBrush" Color="#FACC15"/> <!-- warning -->
+    <SolidColorBrush x:Key="WarningSoftBrush" Color="#FACC15" Opacity="0.18"/> <!-- warning soft -->
+    <SolidColorBrush x:Key="InfoBrush" Color="#38BDF8"/> <!-- info -->
+    <SolidColorBrush x:Key="InfoSoftBrush" Color="#38BDF8" Opacity="0.18"/> <!-- info soft -->
     
-    <!-- Surface Container Brushes - Industry Standard Elevation -->
-    <SolidColorBrush x:Key="SurfaceContainerHighBrush" Color="#252525"/> <!-- Elevated surfaces (dialogs) -->
-    <SolidColorBrush x:Key="SurfaceContainerLowBrush" Color="#181818"/> <!-- Slightly elevated -->
-    <SolidColorBrush x:Key="SurfaceVariantBrush" Color="#2A2A2A"/> <!-- Variant surfaces -->
+    <!-- Link Brushes - Custom -->
+    <SolidColorBrush x:Key="LinkBrush" Color="#60A5FA"/> <!-- link -->
+    <SolidColorBrush x:Key="LinkHoverBrush" Color="#93C5FD"/> <!-- link hover -->
+    
+    <!-- Hover Background - Custom -->
+    <SolidColorBrush x:Key="BgHoverBrush" Color="#1E293B"/> <!-- hover background -->
+    
+    <!-- Surface Container Brushes - Custom -->
+    <SolidColorBrush x:Key="SurfaceContainerHighBrush" Color="#111827"/> <!-- Elevated surfaces (dialogs) -->
+    <SolidColorBrush x:Key="SurfaceContainerLowBrush" Color="#0F172A"/> <!-- Slightly elevated -->
+    <SolidColorBrush x:Key="SurfaceVariantBrush" Color="#1E293B"/> <!-- Variant surfaces -->
+    
+    <!-- ScrollBar Styles - Light dark color for visibility -->
+    <Style TargetType="ScrollBar">
+        <Setter Property="Background" Value="{DynamicResource MaterialDesignBackground}"/>
+        <Setter Property="Foreground" Value="{DynamicResource MaterialDesignDivider}"/>
+        <Setter Property="Width" Value="12"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollBar">
+                    <Grid x:Name="GridRoot">
+                        <Grid.RowDefinitions>
+                            <RowDefinition MaxHeight="18"/>
+                            <RowDefinition Height="0.00001*"/>
+                            <RowDefinition MaxHeight="18"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.RowSpan="3" 
+                                Background="{DynamicResource MaterialDesignBackground}" 
+                                BorderBrush="{DynamicResource MaterialDesignDivider}" 
+                                BorderThickness="1"/>
+                        <RepeatButton Grid.Row="0" 
+                                    Command="ScrollBar.LineUpCommand" 
+                                    Focusable="False">
+                            <Border Background="Transparent" Height="18"/>
+                        </RepeatButton>
+                        <Track x:Name="PART_Track" 
+                               Grid.Row="1" 
+                               IsDirectionReversed="True" 
+                               Focusable="False">
+                            <Track.Thumb>
+                                <Thumb x:Name="Thumb" 
+                                       Background="{DynamicResource MaterialDesignDivider}" 
+                                       BorderBrush="{DynamicResource MaterialDesignDivider}" 
+                                       BorderThickness="1">
+                                    <Thumb.Template>
+                                        <ControlTemplate TargetType="Thumb">
+                                            <Border Background="{TemplateBinding Background}" 
+                                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                                    CornerRadius="6"/>
+                                        </ControlTemplate>
+                                    </Thumb.Template>
+                                </Thumb>
+                            </Track.Thumb>
+                        </Track>
+                        <RepeatButton Grid.Row="2" 
+                                    Command="ScrollBar.LineDownCommand" 
+                                    Focusable="False">
+                            <Border Background="Transparent" Height="18"/>
+                        </RepeatButton>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Thumb" Property="Background" Value="{DynamicResource BgHoverBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- ScrollViewer Style - Ensure scrollbars are visible -->
+    <Style TargetType="ScrollViewer">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollViewer">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <ScrollContentPresenter Grid.Column="0" 
+                                              Grid.Row="0" 
+                                              Content="{TemplateBinding Content}" 
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                        <ScrollBar x:Name="PART_VerticalScrollBar" 
+                                 Grid.Column="1" 
+                                 Grid.Row="0" 
+                                 Orientation="Vertical" 
+                                 ViewportSize="{TemplateBinding ViewportHeight}" 
+                                 Maximum="{TemplateBinding ScrollableHeight}" 
+                                 Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" 
+                                 Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                        <ScrollBar x:Name="PART_HorizontalScrollBar" 
+                                 Grid.Column="0" 
+                                 Grid.Row="1" 
+                                 Orientation="Horizontal" 
+                                 ViewportSize="{TemplateBinding ViewportWidth}" 
+                                 Maximum="{TemplateBinding ScrollableWidth}" 
+                                 Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" 
+                                 Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     
 </ResourceDictionary>
 
