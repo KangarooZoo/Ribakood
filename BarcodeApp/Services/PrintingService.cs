@@ -91,7 +91,7 @@ public class PrintingService : IPrintingService
             {
                 CurrentItem = 0,
                 TotalItems = rangeTotal,
-                Status = "Generating barcode images..."
+                Status = "Triipkoodi piltide genereerimine..."
             });
             
             for (int i = 0; i < rangeItems.Count; i++)
@@ -110,7 +110,7 @@ public class PrintingService : IPrintingService
                     CurrentItem = i + 1,
                     TotalItems = rangeTotal,
                     CurrentItemData = item.Data,
-                    Status = $"Generated {i + 1} of {rangeTotal} images"
+                    Status = $"Genereeritud {i + 1} / {rangeTotal} pilti"
                 });
             }
             
@@ -137,7 +137,7 @@ public class PrintingService : IPrintingService
                     CurrentItem = currentIndex + 1,
                     TotalItems = rangeTotal,
                     CurrentItemData = item.Data,
-                    Status = $"Printing item {actualIndex + 1} of {totalItems} (range {start + 1}-{end + 1})"
+                    Status = $"Trükimine: üksus {actualIndex + 1} / {totalItems} (vahemik {start + 1}-{end + 1})"
                 });
 
                 try
@@ -146,7 +146,7 @@ public class PrintingService : IPrintingService
                     
                     if (barcodeImage == null)
                     {
-                        throw new Exception("Failed to generate barcode image");
+                        throw new Exception("Triipkoodi pildi genereerimine ebaõnnestus");
                     }
                     
                     for (int i = 0; i < quantity && currentIndex < rangeItems.Count; i++)
@@ -193,7 +193,7 @@ public class PrintingService : IPrintingService
                 {
                     CurrentItem = currentIndex,
                     TotalItems = totalItems,
-                    Status = "Print cancelled"
+                    Status = "Trükimine tühistatud"
                 });
                 // Dispose images on cancel
                 foreach (var img in preGeneratedImages)

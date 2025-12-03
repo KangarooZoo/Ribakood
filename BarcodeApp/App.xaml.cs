@@ -63,8 +63,8 @@ public partial class App : Application
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Application startup error:\n\n{ex.Message}\n\nStack trace:\n{ex.StackTrace}", 
-                "Startup Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"Rakenduse käivitamise viga:\n\n{ex.Message}\n\nStack trace:\n{ex.StackTrace}", 
+                "Käivitamise viga", MessageBoxButton.OK, MessageBoxImage.Error);
             Shutdown();
         }
     }
@@ -76,8 +76,8 @@ public partial class App : Application
     
     private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
-        MessageBox.Show($"Unhandled exception:\n\n{e.Exception.Message}\n\nStack trace:\n{e.Exception.StackTrace}", 
-            "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        MessageBox.Show($"Käsitlemata erand:\n\n{e.Exception.Message}\n\nStack trace:\n{e.Exception.StackTrace}", 
+            "Viga", MessageBoxButton.OK, MessageBoxImage.Error);
         e.Handled = true;
     }
 }

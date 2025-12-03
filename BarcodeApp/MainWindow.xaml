@@ -7,7 +7,7 @@
         xmlns:controls="clr-namespace:BarcodeApp.Controls"
         xmlns:views="clr-namespace:BarcodeApp.Views"
         mc:Ignorable="d"
-        Title="Barcode Generator" 
+        Title="Triipkoodi generaator" 
         MinHeight="600" MinWidth="900"
         WindowStartupLocation="CenterScreen"
         Foreground="{DynamicResource MaterialDesignBody}"
@@ -25,7 +25,7 @@
 
         <!-- Top bar with theme toggle -->
         <DockPanel Grid.Row="0" Margin="0,0,0,8">
-            <CheckBox Content="Dark Theme"
+            <CheckBox Content="Tume teema"
                       IsChecked="{Binding IsDarkTheme}"
                       HorizontalAlignment="Right"/>
         </DockPanel>
@@ -57,7 +57,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0"
-                               Text="Barcode Settings" 
+                               Text="Triipkoodi seaded" 
                                FontSize="18"
                                FontWeight="Bold"
                                Foreground="{DynamicResource MaterialDesignBody}"
@@ -65,7 +65,7 @@
 
                     <!-- Data Input -->
                     <TextBlock Grid.Row="1"
-                               Text="Barcode Data" 
+                               Text="Triipkoodi andmed" 
                                FontSize="12"
                                Foreground="{DynamicResource MaterialDesignSecondaryTextBrush}"
                                Margin="0,0,0,4"/>
@@ -131,7 +131,7 @@
 
                     <!-- Symbology Selector -->
                     <TextBlock Grid.Row="4"
-                               Text="Symbology" 
+                               Text="Sümboloogia" 
                                FontSize="12"
                                Foreground="{DynamicResource MaterialDesignSecondaryTextBrush}"
                                Margin="0,0,0,4"/>
@@ -143,7 +143,7 @@
 
                     <!-- Module Width -->
                     <TextBlock Grid.Row="6"
-                               Text="{Binding ModuleWidth, StringFormat='Module Width: {0}'}"
+                               Text="{Binding ModuleWidth, StringFormat='Mooduli laius: {0}'}"
                                Foreground="{DynamicResource MaterialDesignBody}"
                                FontWeight="Medium"
                                Margin="0,0,0,8"/>
@@ -158,7 +158,7 @@
 
                     <!-- Barcode Height -->
                     <TextBlock Grid.Row="8"
-                               Text="{Binding BarcodeHeight, StringFormat='Height: {0}px'}"
+                               Text="{Binding BarcodeHeight, StringFormat='Kõrgus: {0}px'}"
                                Foreground="{DynamicResource MaterialDesignBody}"
                                FontWeight="Medium"
                                Margin="0,0,0,8"/>
@@ -173,7 +173,7 @@
 
                     <!-- Show Text Toggle -->
                     <CheckBox Grid.Row="10"
-                              Content="Show Human-Readable Text"
+                              Content="Näita loetavat teksti"
                               IsChecked="{Binding ShowText}"
                               Style="{StaticResource MaterialDesignCheckBox}"
                               Margin="0,0,0,16"/>
@@ -185,39 +185,39 @@
                     <StackPanel Grid.Row="12"
                                 VerticalAlignment="Bottom">
                         <!-- Batch Mode -->
-                        <Button Content="Load Batch File"
+                        <Button Content="Laadi partii fail"
                                 Command="{Binding LoadBatchFileCommand}"
                                 Style="{StaticResource MaterialDesignOutlinedButton}"
                                 Margin="0,0,0,12"/>
                         <StackPanel Visibility="{Binding IsBatchMode, Converter={StaticResource BooleanToVisibilityConverter}}"
                                     Margin="0,0,0,12">
-                            <Button Content="Manage Batch"
+                            <Button Content="Halda partii"
                                     Command="{Binding ManageBatchCommand}"
                                     Style="{StaticResource MaterialDesignOutlinedButton}"
                                     Margin="0,0,0,8"/>
-                            <Button Content="Clear Batch"
+                            <Button Content="Tühjenda partii"
                                     Command="{Binding ClearBatchCommand}"
                                     Style="{StaticResource MaterialDesignOutlinedButton}"
                                     Margin="0,0,0,8"/>
-                            <Button Content="Print Options"
+                            <Button Content="Trüki seaded"
                                     Command="{Binding ShowPrintOptionsCommand}"
                                     Style="{StaticResource MaterialDesignOutlinedButton}"
                                     Margin="0,0,0,8"/>
-                            <TextBlock Text="{Binding BatchItems.Count, StringFormat='Batch Items: {0}'}"
+                            <TextBlock Text="{Binding BatchItems.Count, StringFormat='Partii üksused: {0}'}"
                                        Foreground="{DynamicResource MaterialDesignBody}"
                                        Margin="0,0,0,4"/>
-                            <TextBlock Text="{Binding BatchFileName, StringFormat='File: {0}'}"
+                            <TextBlock Text="{Binding BatchFileName, StringFormat='Fail: {0}'}"
                                        Foreground="{DynamicResource MaterialDesignSecondaryTextBrush}"
                                        FontSize="11"
                                        TextTrimming="CharacterEllipsis"
                                        Visibility="{Binding BatchFileName, Converter={StaticResource StringToVisibilityConverter}}"
                                        Margin="0,0,0,4"/>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
-                                <TextBlock Text="{Binding ValidBatchItemsCount, StringFormat='Valid: {0}'}"
+                                <TextBlock Text="{Binding ValidBatchItemsCount, StringFormat='Kehtiv: {0}'}"
                                            Foreground="{StaticResource SuccessBrush}"
                                            FontSize="11"
                                            Margin="0,0,8,0"/>
-                                <TextBlock Text="{Binding InvalidBatchItemsCount, StringFormat='Invalid: {0}'}"
+                                <TextBlock Text="{Binding InvalidBatchItemsCount, StringFormat='Vigane: {0}'}"
                                            Foreground="{StaticResource ErrorBrush}"
                                            FontSize="11"
                                            Visibility="{Binding InvalidBatchItemsCount, Converter={StaticResource BooleanToVisibilityConverter}}"/>
@@ -235,7 +235,7 @@
                                   Margin="0,0,0,16"/>
 
                         <!-- Layout Selection -->
-                        <TextBlock Text="Label Layout" 
+                        <TextBlock Text="Märgise paigutus" 
                                    FontSize="12"
                                    Foreground="{DynamicResource MaterialDesignSecondaryTextBrush}"
                                    Margin="0,0,0,4"/>
@@ -246,7 +246,7 @@
                                   Margin="0,0,0,16"/>
 
                         <!-- Quantity -->
-                        <TextBlock Text="Quantity" 
+                        <TextBlock Text="Kogus" 
                                    FontSize="12"
                                    Foreground="{DynamicResource MaterialDesignSecondaryTextBrush}"
                                    Margin="0,0,0,4"/>
@@ -255,7 +255,7 @@
                                  Margin="0,0,0,16"/>
 
                         <!-- Print Button -->
-                        <Button Content="Print Now"
+                        <Button Content="Trüki kohe"
                                 Command="{Binding PrintNowCommand}"
                                 Style="{StaticResource MaterialDesignRaisedButton}"
                                 IsEnabled="{Binding IsLicenseValid}"/>
@@ -272,7 +272,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Text="Live Preview"
+                    <TextBlock Text="Reaalajas eelvaade"
                                FontSize="18"
                                FontWeight="Bold"
                                Foreground="{DynamicResource MaterialDesignBody}"
@@ -319,7 +319,7 @@
                                         </Style>
                                     </Image.Style>
                                 </Image>
-                                <TextBlock Text="Enter barcode data to see preview"
+                                <TextBlock Text="Sisesta triipkoodi andmed eelvaate nägemiseks"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            FontSize="16"

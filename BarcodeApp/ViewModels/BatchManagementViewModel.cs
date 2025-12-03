@@ -174,7 +174,7 @@ public class BatchManagementViewModel : BaseViewModel
         
         if (itemsToRemove.Count > 0)
         {
-            MessageBox.Show($"Removed {itemsToRemove.Count} duplicate item(s).", "Duplicates Removed", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show($"Eemaldatud {itemsToRemove.Count} duplikaat üksus(t).", "Duplikaadid eemaldatud", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
     
@@ -228,8 +228,8 @@ public class BatchManagementViewModel : BaseViewModel
     {
         var dialog = new SaveFileDialog
         {
-            Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
-            Title = "Export Batch to CSV",
+            Filter = "CSV failid (*.csv)|*.csv|Kõik failid (*.*)|*.*",
+            Title = "Ekspordi partii CSV-na",
             DefaultExt = "csv"
         };
         
@@ -238,11 +238,11 @@ public class BatchManagementViewModel : BaseViewModel
             try
             {
                 BatchExportService.ExportToCsv(BatchItems, dialog.FileName);
-                MessageBox.Show($"Successfully exported {BatchItems.Count} item(s) to CSV.", "Export Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"Edukalt eksporditud {BatchItems.Count} üksus(t) CSV-na.", "Eksportimine lõpetatud", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error exporting to CSV: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"CSV eksportimise viga: {ex.Message}", "Eksportimise viga", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
@@ -251,8 +251,8 @@ public class BatchManagementViewModel : BaseViewModel
     {
         var dialog = new SaveFileDialog
         {
-            Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
-            Title = "Export Batch to Text",
+            Filter = "Tekstifailid (*.txt)|*.txt|Kõik failid (*.*)|*.*",
+            Title = "Ekspordi partii tekstina",
             DefaultExt = "txt"
         };
         
@@ -261,11 +261,11 @@ public class BatchManagementViewModel : BaseViewModel
             try
             {
                 BatchExportService.ExportToText(BatchItems, dialog.FileName);
-                MessageBox.Show($"Successfully exported {BatchItems.Count} item(s) to text file.", "Export Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"Edukalt eksporditud {BatchItems.Count} üksus(t) tekstifaili.", "Eksportimine lõpetatud", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error exporting to text: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Teksti eksportimise viga: {ex.Message}", "Eksportimise viga", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
@@ -274,8 +274,8 @@ public class BatchManagementViewModel : BaseViewModel
     {
         var dialog = new SaveFileDialog
         {
-            Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
-            Title = "Export Validation Results",
+            Filter = "CSV failid (*.csv)|*.csv|Kõik failid (*.*)|*.*",
+            Title = "Ekspordi valideerimise tulemused",
             DefaultExt = "csv"
         };
         
@@ -284,11 +284,11 @@ public class BatchManagementViewModel : BaseViewModel
             try
             {
                 BatchExportService.ExportValidationResults(_validationResults, dialog.FileName);
-                MessageBox.Show($"Successfully exported validation results for {_validationResults.Count} item(s).", "Export Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"Edukalt eksporditud valideerimise tulemused {_validationResults.Count} üksuse kohta.", "Eksportimine lõpetatud", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error exporting validation results: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Valideerimise tulemuste eksportimise viga: {ex.Message}", "Eksportimise viga", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

@@ -71,26 +71,26 @@ public class LicenseViewModel : BaseViewModel
     {
         IsBusy = true;
         ErrorMessage = string.Empty;
-        LicenseStatusText = "Validating license...";
+        LicenseStatusText = "Litsentsi valideerimine...";
 
         try
         {
             var success = await _licensingService.ValidateLicenseAsync(LicenseKey);
             if (success)
             {
-                LicenseStatusText = "License activated successfully!";
+                LicenseStatusText = "Litsents aktiveeriti edukalt!";
                 ActivationCompleted?.Invoke(this, true);
             }
             else
             {
-                ErrorMessage = "Invalid license key or activation failed. Please check your key and try again.";
-                LicenseStatusText = "Activation failed";
+                ErrorMessage = "Vigane litsentsivõti või aktiveerimine ebaõnnestus. Palun kontrolli oma võtit ja proovi uuesti.";
+                LicenseStatusText = "Aktiveerimine ebaõnnestus";
             }
         }
         catch (Exception ex)
         {
-            ErrorMessage = $"Error during activation: {ex.Message}";
-            LicenseStatusText = "Activation error";
+            ErrorMessage = $"Aktiveerimise viga: {ex.Message}";
+            LicenseStatusText = "Aktiveerimise viga";
         }
         finally
         {

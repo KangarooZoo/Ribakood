@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:converters="clr-namespace:BarcodeApp.Converters"
         xmlns:models="clr-namespace:BarcodeApp.Models"
-        Title="Batch Management" 
+        Title="Partii haldus" 
         Height="600" 
         Width="800"
         WindowStartupLocation="CenterOwner"
@@ -40,7 +40,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Batch Management"
+            <TextBlock Text="Partii haldus"
                        FontSize="24"
                        FontWeight="Bold"
                        Foreground="{DynamicResource MaterialDesignBody}"/>
@@ -53,7 +53,7 @@
                     Padding="0"
                     Command="{Binding CloseCommand}"
                     Style="{StaticResource MaterialDesignIconButton}"
-                    ToolTip="Close"
+                    ToolTip="Sulge"
                     Foreground="{DynamicResource MaterialDesignBody}"/>
         </Grid>
 
@@ -71,7 +71,7 @@
                     CornerRadius="4"
                     Padding="12">
                 <StackPanel>
-                    <TextBlock Text="Total Items"
+                    <TextBlock Text="Kokku üksusi"
                                FontSize="12"
                                Foreground="{DynamicResource MaterialDesignSecondaryTextBrush}"/>
                     <TextBlock Text="{Binding TotalItems}"
@@ -88,7 +88,7 @@
                     Padding="12"
                     Margin="8,0">
                 <StackPanel>
-                    <TextBlock Text="Valid"
+                    <TextBlock Text="Kehtiv"
                                FontSize="12"
                                Foreground="{DynamicResource MaterialDesignSecondaryTextBrush}"/>
                     <TextBlock Text="{Binding ValidItems}"
@@ -104,7 +104,7 @@
                     CornerRadius="4"
                     Padding="12">
                 <StackPanel>
-                    <TextBlock Text="Invalid"
+                    <TextBlock Text="Vigane"
                                FontSize="12"
                                Foreground="{DynamicResource MaterialDesignSecondaryTextBrush}"/>
                     <TextBlock Text="{Binding InvalidItems}"
@@ -132,35 +132,35 @@
                          Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource MaterialDesignOutlinedTextBox}"
                          Margin="0,0,8,0">
-                    <TextBox.Tag>Search items...</TextBox.Tag>
+                    <TextBox.Tag>Otsi üksusi...</TextBox.Tag>
                 </TextBox>
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <Button Content="Sort: Data"
+                    <Button Content="Sorteeri: andmed"
                             Command="{Binding SortByDataCommand}"
                             Style="{StaticResource MaterialDesignOutlinedButton}"
                             Margin="0,0,4,0"
                             Padding="8,4"/>
-                    <Button Content="Sort: Type"
+                    <Button Content="Sorteeri: tüüp"
                             Command="{Binding SortBySymbologyCommand}"
                             Style="{StaticResource MaterialDesignOutlinedButton}"
                             Margin="0,0,4,0"
                             Padding="8,4"/>
-                    <Button Content="Valid Only"
+                    <Button Content="Ainult kehtivad"
                             Command="{Binding FilterValidOnlyCommand}"
                             Style="{StaticResource MaterialDesignOutlinedButton}"
                             Margin="0,0,4,0"
                             Padding="8,4"/>
-                    <Button Content="Invalid Only"
+                    <Button Content="Ainult vigased"
                             Command="{Binding FilterInvalidOnlyCommand}"
                             Style="{StaticResource MaterialDesignOutlinedButton}"
                             Margin="0,0,4,0"
                             Padding="8,4"/>
-                    <Button Content="Clear Filter"
+                    <Button Content="Tühjenda filter"
                             Command="{Binding ClearFilterCommand}"
                             Style="{StaticResource MaterialDesignOutlinedButton}"
                             Margin="0,0,4,0"
                             Padding="8,4"/>
-                    <Button Content="Remove Duplicates"
+                    <Button Content="Eemalda duplikaadid"
                             Command="{Binding RemoveDuplicatesCommand}"
                             Style="{StaticResource MaterialDesignOutlinedButton}"
                             Padding="8,4"/>
@@ -181,23 +181,23 @@
                       BorderBrush="{DynamicResource MaterialDesignDivider}"
                       Foreground="{DynamicResource MaterialDesignBody}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Index" 
+                    <DataGridTextColumn Header="Indeks" 
                                         Binding="{Binding Index}" 
                                         Width="60"
                                         IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Data" 
+                    <DataGridTextColumn Header="Andmed" 
                                         Binding="{Binding Item.Data}" 
                                         Width="*"
                                         IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Symbology" 
+                    <DataGridTextColumn Header="Sümboloogia" 
                                         Binding="{Binding Item.Symbology}" 
                                         Width="120"
                                         IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Quantity" 
+                    <DataGridTextColumn Header="Kogus" 
                                         Binding="{Binding Item.Quantity}" 
                                         Width="80"
                                         IsReadOnly="True"/>
-                    <DataGridTemplateColumn Header="Status" Width="100">
+                    <DataGridTemplateColumn Header="Olek" Width="100">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -218,10 +218,10 @@
                                     <TextBlock Text="{Binding IsValid, Converter={StaticResource BooleanToVisibilityConverter}}">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
-                                                <Setter Property="Text" Value="Invalid"/>
+                                                <Setter Property="Text" Value="Vigane"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IsValid}" Value="True">
-                                                        <Setter Property="Text" Value="Valid"/>
+                                                        <Setter Property="Text" Value="Kehtiv"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -231,7 +231,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Error" 
+                    <DataGridTextColumn Header="Viga" 
                                         Binding="{Binding ErrorMessage}" 
                                         Width="*"
                                         IsReadOnly="True">
@@ -251,31 +251,31 @@
                     Orientation="Horizontal" 
                     HorizontalAlignment="Right"
                     Margin="0,0,0,16">
-            <Button Content="Preview"
+            <Button Content="Eelvaade"
                     Command="{Binding PreviewBatchCommand}"
                     Style="{StaticResource MaterialDesignOutlinedButton}"
                     Margin="0,0,8,0"/>
-            <Button Content="Export CSV"
+            <Button Content="Ekspordi CSV"
                     Command="{Binding ExportToCsvCommand}"
                     Style="{StaticResource MaterialDesignOutlinedButton}"
                     Margin="0,0,8,0"/>
-            <Button Content="Export Text"
+            <Button Content="Ekspordi tekst"
                     Command="{Binding ExportToTextCommand}"
                     Style="{StaticResource MaterialDesignOutlinedButton}"
                     Margin="0,0,8,0"/>
-            <Button Content="Export Validation"
+            <Button Content="Ekspordi valideerimine"
                     Command="{Binding ExportValidationResultsCommand}"
                     Style="{StaticResource MaterialDesignOutlinedButton}"
                     Margin="0,0,8,0"/>
-            <Button Content="Edit"
+            <Button Content="Muuda"
                     Command="{Binding EditItemCommand}"
                     Style="{StaticResource MaterialDesignOutlinedButton}"
                     Margin="0,0,8,0"/>
-            <Button Content="Remove"
+            <Button Content="Eemalda"
                     Command="{Binding RemoveItemCommand}"
                     Style="{StaticResource MaterialDesignOutlinedButton}"
                     Margin="0,0,8,0"/>
-            <Button Content="Clear All"
+            <Button Content="Tühjenda kõik"
                     Command="{Binding ClearAllCommand}"
                     Style="{StaticResource MaterialDesignOutlinedButton}"/>
         </StackPanel>
@@ -284,7 +284,7 @@
         <StackPanel Grid.Row="4" 
                     Orientation="Horizontal" 
                     HorizontalAlignment="Right">
-            <Button Content="Close"
+            <Button Content="Sulge"
                     Command="{Binding CloseCommand}"
                     Style="{StaticResource MaterialDesignRaisedButton}"/>
         </StackPanel>

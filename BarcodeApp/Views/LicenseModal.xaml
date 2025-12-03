@@ -43,7 +43,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="License Settings"
+                <TextBlock Text="Litsentsi seaded"
                            FontSize="24"
                            FontWeight="Bold"
                            Foreground="{DynamicResource MaterialDesignBody}"/>
@@ -56,18 +56,18 @@
                         Padding="0"
                         Command="{Binding CloseCommand}"
                         Style="{StaticResource MaterialDesignIconButton}"
-                        ToolTip="Close"
+                        ToolTip="Sulge"
                         Foreground="{DynamicResource MaterialDesignBody}"/>
             </Grid>
 
             <!-- Content -->
             <StackPanel Grid.Row="1" Margin="0,0,0,24">
-                <TextBlock Text="Enter your license key to activate the application."
+                <TextBlock Text="Sisesta oma litsentsivõti rakenduse aktiveerimiseks."
                            Foreground="{DynamicResource MaterialDesignBody}"
                            TextWrapping="Wrap"
                            Margin="0,0,0,24"/>
 
-                <TextBlock Text="License Key" 
+                <TextBlock Text="Litsentsivõti" 
                            FontSize="12"
                            Foreground="{DynamicResource MaterialDesignSecondaryTextBrush}"
                            Margin="0,0,0,4"/>
@@ -87,7 +87,7 @@
                            Foreground="{DynamicResource MaterialDesignBody}"
                            Margin="0,0,0,24"/>
 
-                <TextBlock Text="Machine ID:"
+                <TextBlock Text="Masina ID:"
                            FontSize="14"
                            FontWeight="SemiBold"
                            Foreground="{DynamicResource MaterialDesignBody}"
@@ -102,7 +102,7 @@
             <StackPanel Grid.Row="2" 
                         Orientation="Horizontal" 
                         HorizontalAlignment="Right">
-                <Button Content="Activate"
+                <Button Content="Aktiveeri"
                         Command="{Binding ActivateCommand}"
                         Style="{StaticResource MaterialDesignRaisedButton}"
                         Margin="0,0,8,0"

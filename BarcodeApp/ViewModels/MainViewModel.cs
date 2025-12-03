@@ -21,7 +21,6 @@ public class MainViewModel : BaseViewModel
     private readonly IPrintingService _printingService;
     private readonly ILicensingService _licensingService;
 
-    private bool _isDarkTheme;
     private ImageSource? _previewImage;
     private string _inputData = string.Empty;
     private BarcodeSymbology _selectedSymbology = BarcodeSymbology.Code128;
@@ -37,7 +36,7 @@ public class MainViewModel : BaseViewModel
     private bool _isBatchMode;
     private string _batchFileName = string.Empty;
     private BatchPrintOptions _batchPrintOptions = new();
-    private string _licenseStatusText = "Checking license...";
+    private string _licenseStatusText = "Litsentsi kontrollimine...";
     private bool _isLicenseValid;
     private DateTime? _licenseExpiry;
     private LicenseViewModel? _licenseViewModel;
@@ -53,10 +52,7 @@ public class MainViewModel : BaseViewModel
         _printingService = printingService;
         _licensingService = licensingService;
 
-        _isDarkTheme = _themeService.IsDarkTheme;
         _selectedLayout = AvailableLayouts.FirstOrDefault() ?? new LabelLayout { Name = "A4", Width = 210, Height = 297 };
-
-        ToggleThemeCommand = new RelayCommand(_ => ToggleTheme());
         LoadBatchFileCommand = new RelayCommand(_ => LoadBatchFile());
         PrintNowCommand = new RelayCommand(_ => PrintNow(), _ => CanPrint());
         ShowLicenseModalCommand = new RelayCommand(_ => ShowLicenseModal());
@@ -87,17 +83,6 @@ public class MainViewModel : BaseViewModel
         UpdatePreview();
     }
 
-    public bool IsDarkTheme
-    {
-        get => _isDarkTheme;
-        set
-        {
-            if (SetProperty(ref _isDarkTheme, value))
-            {
-                ToggleTheme();
-            }
-        }
-    }
 
     public ImageSource? PreviewImage
     {
@@ -273,7 +258,6 @@ public class MainViewModel : BaseViewModel
         set => SetProperty(ref _licenseExpiry, value);
     }
 
-    public ICommand ToggleThemeCommand { get; }
     public ICommand LoadBatchFileCommand { get; }
     public ICommand PrintNowCommand { get; }
     public ICommand ShowLicenseModalCommand { get; }
@@ -294,12 +278,6 @@ public class MainViewModel : BaseViewModel
         private set => SetProperty(ref _licenseViewModel, value);
     }
 
-    private void ToggleTheme()
-    {
-        _themeService.ToggleTheme();
-        _isDarkTheme = _themeService.IsDarkTheme;
-        OnPropertyChanged(nameof(IsDarkTheme));
-    }
 
     private void ValidateInput()
     {
@@ -356,8 +334,8 @@ public class MainViewModel : BaseViewModel
     {
         var dialog = new OpenFileDialog
         {
-            Filter = "CSV files (*.csv)|*.csv|Text files (*.txt)|*.txt|All files (*.*)|*.*",
-            Title = "Select batch file",
+            Filter = "CSV failid (*.csv)|*.csv|Tekstifailid (*.txt)|*.txt|Kõik failid (*.*)|*.*",
+            Title = "Vali partii fail",
             InitialDirectory = !string.IsNullOrEmpty(Properties.Settings.Default.LastBatchFileLocation) 
                 ? Properties.Settings.Default.LastBatchFileLocation 
                 : Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
@@ -411,28 +389,28 @@ public class MainViewModel : BaseViewModel
                     {
                         ValidateBatchItems();
                     }
-                    ShowSuccessMessage("Batch File Loaded", $"Successfully loaded {BatchItems.Count} item(s) from batch file.\nValid: {ValidBatchItemsCount}, Invalid: {InvalidBatchItemsCount}");
+                    ShowSuccessMessage("Partii fail laetud", $"Partii fail laeti edukalt. Üksusi: {BatchItems.Count}.\nKehtiv: {ValidBatchItemsCount}, Vigane: {InvalidBatchItemsCount}");
                 }
                 else
                 {
-                    ShowErrorMessage("Empty Batch File", "The selected file contains no valid items.", "Please ensure the file contains at least one non-empty line.");
+                    ShowErrorMessage("Tühi partii fail", "Valitud fail ei sisalda ühtegi kehtivat üksust.", "Palun veendu, et fail sisaldab vähemalt ühte mitte-tühja rida.");
                 }
             }
             catch (FileNotFoundException)
             {
-                ShowErrorMessage("File Not Found", "The selected file could not be found.", "Please check that the file exists and try again.");
+                ShowErrorMessage("Faili ei leitud", "Valitud faili ei leitud.", "Palun kontrolli, et fail eksisteerib, ja proovi uuesti.");
             }
             catch (UnauthorizedAccessException)
             {
-                ShowErrorMessage("Access Denied", "You do not have permission to access this file.", "Please check file permissions and try again.");
+                ShowErrorMessage("Juurdepääs keelatud", "Sul pole õigust sellele failile juurde pääseda.", "Palun kontrolli faili õigusi ja proovi uuesti.");
             }
             catch (IOException ex)
             {
-                ShowErrorMessage("File Read Error", "An error occurred while reading the file.", ex.Message);
+                ShowErrorMessage("Faili lugemise viga", "Faili lugemisel tekkis viga.", ex.Message);
             }
             catch (Exception ex)
             {
-                ShowErrorMessage("Error Loading Batch File", "An unexpected error occurred while loading the batch file.", ex.Message);
+                ShowErrorMessage("Partii faili laadimise viga", "Partii faili laadimisel tekkis ootamatu viga.", ex.Message);
             }
         }
     }
@@ -479,7 +457,7 @@ public class MainViewModel : BaseViewModel
                 
                 if (itemsToPrint.Count == 0)
                 {
-                    ShowErrorMessage("No Items to Print", "The selected range contains no items.", null);
+                    ShowErrorMessage("Trükimiseks üksusi pole", "Valitud vahemik ei sisalda ühtegi üksust.", null);
                     return;
                 }
                 
@@ -490,7 +468,7 @@ public class MainViewModel : BaseViewModel
                 };
 
                 progressViewModel.IsPrinting = true;
-                progressViewModel.UpdateProgress(0, itemsToPrint.Count, string.Empty, "Starting print...");
+                progressViewModel.UpdateProgress(0, itemsToPrint.Count, string.Empty, "Trükimise alustamine...");
 
                 // Subscribe to progress events
                 EventHandler<PrintProgressEventArgs>? progressHandler = (sender, e) =>
@@ -512,7 +490,7 @@ public class MainViewModel : BaseViewModel
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         progressDialog.Close();
-                        ShowSuccessMessage("Batch Print Complete", $"Successfully printed {itemsToPrint.Count} item(s).");
+                        ShowSuccessMessage("Partii trükimine lõpetatud", $"Edukalt trükitud {itemsToPrint.Count} üksus(t).");
                     });
                 }
                 catch (OperationCanceledException)
@@ -520,7 +498,7 @@ public class MainViewModel : BaseViewModel
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         progressDialog.Close();
-                        ShowErrorMessage("Print Cancelled", "The print operation was cancelled.", null);
+                        ShowErrorMessage("Trükimine tühistatud", "Trükimise operatsioon tühistati.", null);
                     });
                 }
                 finally
@@ -538,16 +516,16 @@ public class MainViewModel : BaseViewModel
                     Quantity = Quantity
                 };
                 await _printingService.PrintAsync(item, SelectedPrinter, SelectedLayout, ModuleWidth, BarcodeHeight, ShowText);
-                ShowSuccessMessage("Print Complete", "Barcode printed successfully.");
+                ShowSuccessMessage("Trükimine lõpetatud", "Triipkood trükiti edukalt.");
             }
         }
         catch (System.Drawing.Printing.InvalidPrinterException)
         {
-            ShowErrorMessage("Printer Error", "The selected printer is not available.", "Please select a different printer and try again.");
+            ShowErrorMessage("Printeri viga", "Valitud printer pole saadaval.", "Palun vali teine printer ja proovi uuesti.");
         }
         catch (Exception ex)
         {
-            ShowErrorMessage("Print Error", "An error occurred while printing.", ex.Message);
+            ShowErrorMessage("Trükimise viga", "Trükimisel tekkis viga.", ex.Message);
         }
     }
 
@@ -564,15 +542,15 @@ public class MainViewModel : BaseViewModel
 
         if (status.IsValid && status.ExpiryDate.HasValue)
         {
-            LicenseStatusText = $"Active until {status.ExpiryDate.Value:yyyy-MM-dd}";
+            LicenseStatusText = $"Aktiivne kuni {status.ExpiryDate.Value:yyyy-MM-dd}";
         }
         else if (status.IsGracePeriod)
         {
-            LicenseStatusText = "Offline Grace Period";
+            LicenseStatusText = "Võrguvälise graatsiaperiood";
         }
         else
         {
-            LicenseStatusText = "License Required";
+            LicenseStatusText = "Litsents on vajalik";
         }
     }
     
