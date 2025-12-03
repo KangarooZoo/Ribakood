@@ -98,5 +98,7 @@ Thumbs.db
 # TypeScript files
 *.ts
 
-# Markdown files
+# Markdown files (except README files)
 *.md
+!README.md
+!**/README.md
