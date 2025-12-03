@@ -1,0 +1,430 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:BarcodeApp.Converters">
+    
+    <!-- Industry Standard Dark Mode Primary Colors -->
+    <Color x:Key="PrimaryColor">#6366F1</Color> <!-- Indigo primary (bright, visible) -->
+    <Color x:Key="PrimaryDarkColor">#4F46E5</Color> <!-- Darker indigo for containers -->
+    <Color x:Key="PrimaryLightColor">#E0E7FF</Color> <!-- Light indigo text -->
+    <Color x:Key="OnPrimaryColor">#FFFFFF</Color> <!-- White text on primary -->
+    <Color x:Key="AccentColor">#8B5CF6</Color> <!-- Purple accent -->
+    <Color x:Key="AccentDarkColor">#7C3AED</Color> <!-- Darker purple -->
+    
+    <!-- Light Theme Colors - Improved contrast -->
+    <SolidColorBrush x:Key="LightBackgroundBrush" Color="#F5F5F5"/>
+    <SolidColorBrush x:Key="LightSurfaceBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="LightTextBrush" Color="#212121"/>
+    <SolidColorBrush x:Key="LightSecondaryTextBrush" Color="#424242"/> <!-- Darker for better contrast -->
+    <SolidColorBrush x:Key="LightDividerBrush" Color="#9E9E9E"/> <!-- Darker for visibility -->
+    
+    <!-- Dark Theme Colors - Industry Standard -->
+    <SolidColorBrush x:Key="DarkBackgroundBrush" Color="#121212"/> <!-- Pure dark background -->
+    <SolidColorBrush x:Key="DarkSurfaceBrush" Color="#1E1E1E"/> <!-- Card/surface (VS Code style) -->
+    <SolidColorBrush x:Key="DarkTextBrush" Color="#E4E4E7"/> <!-- High contrast white -->
+    <SolidColorBrush x:Key="DarkSecondaryTextBrush" Color="#A1A1AA"/> <!-- Visible gray -->
+    <SolidColorBrush x:Key="DarkDividerBrush" Color="#3F3F46"/> <!-- Visible dividers -->
+    
+    <!-- Dynamic Theme Resources (default to industry standard dark theme) -->
+    <SolidColorBrush x:Key="MaterialDesignPaper" Color="#1E1E1E"/> <!-- Card/surface -->
+    <SolidColorBrush x:Key="MaterialDesignBody" Color="#E4E4E7"/> <!-- Primary text -->
+    <SolidColorBrush x:Key="MaterialDesignDivider" Color="#3F3F46"/> <!-- Dividers/borders -->
+    <SolidColorBrush x:Key="MaterialDesignBackground" Color="#121212"/> <!-- Background -->
+    
+    <!-- Primary Color Brushes -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/> <!-- primary -->
+    <SolidColorBrush x:Key="PrimaryDarkBrush" Color="{StaticResource PrimaryDarkColor}"/> <!-- primaryContainer -->
+    <SolidColorBrush x:Key="OnPrimaryBrush" Color="{StaticResource OnPrimaryColor}"/> <!-- onPrimary -->
+    <SolidColorBrush x:Key="OnPrimaryContainerBrush" Color="{StaticResource PrimaryLightColor}"/> <!-- onPrimaryContainer -->
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}"/> <!-- tertiary -->
+    
+    <!-- Card Style with better visibility and separation -->
+    <Style x:Key="MaterialCard" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="16" ShadowDepth="4" Opacity="0.2" Color="Black"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Outlined TextBox Style with better visibility -->
+    <Style x:Key="MaterialDesignOutlinedTextBox" TargetType="TextBox">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}"/>
+        <Setter Property="BorderThickness" Value="0,0,0,2.5"/> <!-- Thicker, more visible border -->
+        <Setter Property="Padding" Value="0,8"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4,4,0,0">
+                        <Grid>
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                        Margin="{TemplateBinding Padding}"
+                                        Focusable="False"/>
+                            <TextBlock x:Name="HintText"
+                                     Text="{TemplateBinding Tag}"
+                                     Foreground="{DynamicResource MaterialDesignSecondaryTextBrush}"
+                                     VerticalAlignment="Center"
+                                     Margin="0,0,0,8"
+                                     IsHitTestVisible="False"
+                                     Visibility="Collapsed">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource AncestorType=TextBox}}" Value="">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush">
+                    <Setter.Value>
+                        <SolidColorBrush Color="{StaticResource PrimaryColor}" Opacity="0.8"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/> <!-- primary for focused state -->
+                <Setter Property="BorderThickness" Value="0,0,0,3"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="BorderBrush">
+                    <Setter.Value>
+                        <SolidColorBrush Color="#3F3F46" Opacity="0.4"/> <!-- Visible disabled border -->
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Foreground">
+                    <Setter.Value>
+                        <SolidColorBrush Color="#71717A" Opacity="0.6"/> <!-- Visible disabled text -->
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Outlined ComboBox Style with better visibility -->
+    <Style x:Key="MaterialDesignOutlinedComboBox" TargetType="ComboBox">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}"/>
+        <Setter Property="BorderThickness" Value="0,0,0,2.5"/> <!-- Thicker, more visible border -->
+        <Setter Property="Padding" Value="0,8"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush">
+                    <Setter.Value>
+                        <SolidColorBrush Color="{StaticResource PrimaryColor}" Opacity="0.8"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                <Setter Property="BorderThickness" Value="0,0,0,3"/> <!-- Even thicker when focused -->
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="BorderBrush">
+                    <Setter.Value>
+                        <SolidColorBrush Color="#3F3F46" Opacity="0.4"/> <!-- Visible disabled border -->
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Foreground">
+                    <Setter.Value>
+                        <SolidColorBrush Color="#71717A" Opacity="0.6"/> <!-- Visible disabled text -->
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Raised Button Style -->
+    <Style x:Key="MaterialDesignRaisedButton" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/> <!-- primary -->
+        <Setter Property="Foreground" Value="{StaticResource OnPrimaryBrush}"/> <!-- onPrimary -->
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="16,8"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            CornerRadius="4"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource PrimaryDarkBrush}"/> <!-- primaryContainer -->
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource PrimaryDarkBrush}"/> <!-- primaryContainer -->
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Color="#3F3F46" Opacity="0.5"/> <!-- Visible disabled background -->
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Foreground">
+                    <Setter.Value>
+                        <SolidColorBrush Color="#71717A" Opacity="0.6"/> <!-- Visible disabled text -->
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Outlined Button Style -->
+    <Style x:Key="MaterialDesignOutlinedButton" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/> <!-- primary -->
+        <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}"/> <!-- outline -->
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="Padding" Value="16,10"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Color="{StaticResource PrimaryColor}" Opacity="0.1"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Color="{StaticResource PrimaryColor}" Opacity="0.2"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}"/>
+                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignSecondaryTextBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- CheckBox Style with better visibility -->
+    <Style x:Key="MaterialDesignCheckBox" TargetType="CheckBox">
+        <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+    </Style>
+    
+    <!-- Icon Button Style -->
+    <Style x:Key="MaterialDesignIconButton" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="8"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            CornerRadius="4"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Color="#3F3F46" Opacity="0.6"/> <!-- Visible hover state -->
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Color="#52525B" Opacity="0.8"/> <!-- Visible pressed state -->
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Slider Button Style - Visible track with color -->
+    <Style x:Key="SliderButtonStyle" TargetType="RepeatButton">
+        <Setter Property="SnapsToDevicePixels" Value="true"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="IsTabStop" Value="false"/>
+        <Setter Property="Focusable" Value="false"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RepeatButton">
+                    <Border Height="4" 
+                            Background="{DynamicResource MaterialDesignDivider}"
+                            CornerRadius="2"
+                            Margin="0,5,0,5"
+                            Opacity="1"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Slider Thumb Style - Smaller and round, stays circular when dragged -->
+    <Style x:Key="SliderThumbStyle" TargetType="Thumb">
+        <Setter Property="SnapsToDevicePixels" Value="true"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="Height" Value="14"/>
+        <Setter Property="Width" Value="14"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Thumb">
+                    <Grid ClipToBounds="True">
+                        <Ellipse x:Name="Ellipse"
+                                 Fill="{StaticResource PrimaryBrush}"
+                                 Stroke="{StaticResource PrimaryDarkBrush}"
+                                 StrokeThickness="1.5"
+                                 Width="14"
+                                 Height="14"
+                                 RenderTransformOrigin="0.5,0.5">
+                            <Ellipse.RenderTransform>
+                                <ScaleTransform x:Name="ScaleTransform" ScaleX="1" ScaleY="1"/>
+                            </Ellipse.RenderTransform>
+                            <Ellipse.Effect>
+                                <DropShadowEffect BlurRadius="3" ShadowDepth="1" Opacity="0.2" Color="Black"/>
+                            </Ellipse.Effect>
+                        </Ellipse>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Ellipse" Property="Fill" Value="{StaticResource PrimaryDarkBrush}"/>
+                            <Setter TargetName="Ellipse" Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="1.14" ScaleY="1.14"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsDragging" Value="True">
+                            <Setter TargetName="Ellipse" Property="Fill" Value="{StaticResource PrimaryDarkBrush}"/>
+                            <Setter TargetName="Ellipse" Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="1.1" ScaleY="1.1"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Slider Style with visible colored track -->
+    <Style x:Key="MaterialSlider" TargetType="Slider">
+        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource MaterialDesignDivider}"/>
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="TickPlacement" Value="None"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Slider">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <!-- Background track -->
+                        <Border Grid.Row="1"
+                                Height="4"
+                                Background="{DynamicResource MaterialDesignDivider}"
+                                CornerRadius="2"
+                                VerticalAlignment="Center"
+                                Margin="0,8,0,8"/>
+                        <!-- Filled portion of track -->
+                        <Rectangle Grid.Row="1"
+                                   Height="4"
+                                   Fill="{TemplateBinding Foreground}"
+                                   RadiusX="2"
+                                   RadiusY="2"
+                                   VerticalAlignment="Center"
+                                   Margin="0,8,0,8"
+                                   HorizontalAlignment="Left">
+                            <Rectangle.Width>
+                                <MultiBinding Converter="{x:Static converters:SliderValueToWidthConverter.Instance}">
+                                    <Binding Path="Value" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                    <Binding Path="Minimum" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                    <Binding Path="Maximum" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                </MultiBinding>
+                            </Rectangle.Width>
+                        </Rectangle>
+                        <Track Grid.Row="1" Name="PART_Track">
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton Command="Slider.DecreaseLarge" 
+                                            Style="{StaticResource SliderButtonStyle}"/>
+                            </Track.DecreaseRepeatButton>
+                            <Track.Thumb>
+                                <Thumb Style="{StaticResource SliderThumbStyle}"/>
+                            </Track.Thumb>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Command="Slider.IncreaseLarge" 
+                                            Style="{StaticResource SliderButtonStyle}"/>
+                            </Track.IncreaseRepeatButton>
+                        </Track>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Secondary Text Brush - Industry Standard -->
+    <SolidColorBrush x:Key="MaterialDesignSecondaryTextBrush" Color="#A1A1AA"/> <!-- Visible gray for secondary text -->
+    
+    <!-- Warning/Error Colors - Industry Standard (Bright and Visible) -->
+    <SolidColorBrush x:Key="ErrorBrush" Color="#EF4444"/> <!-- Bright red (highly visible) -->
+    <SolidColorBrush x:Key="OnErrorBrush" Color="#FFFFFF"/> <!-- White text on error -->
+    <SolidColorBrush x:Key="SuccessBrush" Color="#22C55E"/> <!-- Bright green (visible) -->
+    <SolidColorBrush x:Key="WarningBrush" Color="#F59E0B"/> <!-- Bright amber (visible) -->
+    
+    <!-- Surface Container Brushes - Industry Standard Elevation -->
+    <SolidColorBrush x:Key="SurfaceContainerHighBrush" Color="#252525"/> <!-- Elevated surfaces (dialogs) -->
+    <SolidColorBrush x:Key="SurfaceContainerLowBrush" Color="#181818"/> <!-- Slightly elevated -->
+    <SolidColorBrush x:Key="SurfaceVariantBrush" Color="#2A2A2A"/> <!-- Variant surfaces -->
+    
+</ResourceDictionary>
+

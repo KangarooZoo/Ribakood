@@ -1,0 +1,107 @@
+<Window x:Class="BarcodeApp.Views.LicenseDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:converters="clr-namespace:BarcodeApp.Converters"
+        Title="License Activation" 
+        Height="400" 
+        Width="500"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        Foreground="{DynamicResource MaterialDesignBody}"
+        FontSize="13"
+        FontFamily="Segoe UI"
+        Background="{DynamicResource MaterialDesignPaper}">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Resources/MaterialDesignStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <!-- Converters -->
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="License Activation Required"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource MaterialDesignBody}"/>
+            <Button Grid.Column="1"
+                    Content="×"
+                    FontSize="24"
+                    FontWeight="Bold"
+                    Width="36"
+                    Height="36"
+                    Padding="0"
+                    Command="{Binding CloseCommand}"
+                    Style="{StaticResource MaterialDesignIconButton}"
+                    ToolTip="Close"
+                    Foreground="{DynamicResource MaterialDesignBody}"/>
+        </Grid>
+
+        <StackPanel Grid.Row="1">
+            <TextBlock Text="Please enter your license key to continue using the application."
+                       Foreground="{DynamicResource MaterialDesignBody}"
+                       TextWrapping="Wrap"
+                       Margin="0,0,0,16"/>
+
+            <TextBlock Text="License Key" 
+                       FontSize="12"
+                       Foreground="{DynamicResource MaterialDesignSecondaryTextBrush}"
+                       Margin="0,0,0,4"/>
+            <TextBox Text="{Binding LicenseKey, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Margin="0,0,0,16"
+                     IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"/>
+
+            <TextBlock Text="{Binding ErrorMessage}"
+                       Foreground="Red"
+                       TextWrapping="Wrap"
+                       Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"
+                       Margin="0,0,0,16"/>
+
+            <TextBlock Text="{Binding LicenseStatusText}"
+                       Foreground="{DynamicResource MaterialDesignBody}"
+                       Margin="0,0,0,16"/>
+
+            <TextBlock Text="Machine ID:"
+                       FontSize="14"
+                       FontWeight="SemiBold"
+                       Foreground="{DynamicResource MaterialDesignBody}"
+                       Margin="0,8,0,4"/>
+            <TextBox Text="{Binding MachineIdDisplay, Mode=OneWay}"
+                     IsReadOnly="True"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Margin="0,0,0,16"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right">
+            <Button Content="Activate"
+                    Command="{Binding ActivateCommand}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Margin="0,0,8,0"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"/>
+            <ProgressBar IsIndeterminate="True"
+                         Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
+                         Width="100"
+                         Height="4"
+                         Margin="0,0,8,0"/>
+        </StackPanel>
+    </Grid>
+</Window>

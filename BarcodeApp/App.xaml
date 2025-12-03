@@ -1,0 +1,23 @@
+﻿<Application x:Class="BarcodeApp.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:BarcodeApp"
+             xmlns:converters="clr-namespace:BarcodeApp.Converters">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Custom Material Design Styles -->
+                <ResourceDictionary Source="Resources/MaterialDesignStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <!-- Converters -->
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+            <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter"/>
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+            <converters:SliderValueToWidthConverter x:Key="SliderValueToWidthConverter"/>
+            <converters:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
